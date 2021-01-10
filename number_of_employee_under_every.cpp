@@ -93,6 +93,18 @@ typedef unsigned long long int uint64;
 int main()
 {
     fast
-    
+    int n = 6;
+    char emp[n] = {'A', 'B', 'C', 'D', 'E', 'F'};
+    char man[n] = {'C', 'C', 'F', 'E', 'F', 'F'};
+    map<char, int> dp;
+    for(auto i : emp) dp[i] = 0;
+    for(int i = 0; i < n; i++)
+    {
+        dp[man[i]] = 1 + max(dp[emp[i]], dp[man[i]]);
+    }
+    for(auto i : emp)
+    {
+        cout<<dp[i]<<endl;
+    }
     return 0;
 }
