@@ -90,32 +90,60 @@ typedef unsigned long int uint32;
 typedef long long int int64;
 typedef unsigned long long int uint64;
 
-int longLenSub(int arr[], int n)
+void minRange(int arr[], int n, int k)
 {
-    unordered_map<int, int > um;
-    int long_len = 0;
+    int l = 0, r = n;
+    int j = -1;
+    map<int, int> hm;
+
     for(int i = 0; i < n; i++)
     {
-        int len = 0;
-        
-        if(um.find(arr[i]-1) != um.end() && len < um[arr[i]-1]) len = um[arr[i]-1];
-        if(um.find(arr[i]+1) != um.end() && len < um[arr[i]+1]) len = um[arr[i]+1];
+        while(j < n)
+        {
+            j++;
 
-        //If adjacent difference of 0 is also allowed then we can have the easier modifications
+            if(hm.size() < k)   hm[arr[j]]++;
 
-        um[arr[i]] = len+1;
+            if(hm.size() == k && (r-l) >= (j-i))
+            {
+                r = j;
+                l = i;
+                break;
+            }
+        }
 
-        if(long_len < um[arr[i]])    long_len = um[arr[i]];
+        if(hm.size() < k) break;
+
+        while(hm.size() == k)
+        {
+            if(hm[arr[i]] == 1) hm.erase(arr[i]);
+            else hm[arr[i]]--;
+
+            i++;
+
+            if(hm.size() == k && (r-l) >= (j-i))
+            {
+                r = j;
+                l = i;
+            }
+        }
+
+        if (hm[arr[i]] == 1)
+            hm.erase(arr[i]);
+        else
+            hm[arr[i]]--;
     }
-    return long_len;
+    if (l == 0 && r == n)
+        cout << "Invalid k" << endl;
+    else
+        cout << l << " " << r << endl;
 }
 
 int main()
 {
-    fast
-
-    int arr[] = {1, 2, 3, 4, 5, 3, 2};
+    int arr[] = {1, 1, 2, 2, 3, 3, 4, 5};
     int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "Longest length subsequence = "<< longLenSub(arr, n);
+    int k = 3;
+    minRange(arr, n, k);
     return 0;
 }

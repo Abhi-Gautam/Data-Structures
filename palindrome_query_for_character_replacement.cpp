@@ -90,32 +90,49 @@ typedef unsigned long int uint32;
 typedef long long int int64;
 typedef unsigned long long int uint64;
 
-int longLenSub(int arr[], int n)
+void addremoveUnequal(string &s, int index, int n, unordered_set<int> &ss)
 {
-    unordered_map<int, int > um;
-    int long_len = 0;
-    for(int i = 0; i < n; i++)
+    if(s[index] == s[n-1-index])
     {
-        int len = 0;
-        
-        if(um.find(arr[i]-1) != um.end() && len < um[arr[i]-1]) len = um[arr[i]-1];
-        if(um.find(arr[i]+1) != um.end() && len < um[arr[i]+1]) len = um[arr[i]+1];
-
-        //If adjacent difference of 0 is also allowed then we can have the easier modifications
-
-        um[arr[i]] = len+1;
-
-        if(long_len < um[arr[i]])    long_len = um[arr[i]];
+        auto it = ss.find(index);
+        if(it != ss.end()) ss.erase(it);
     }
-    return long_len;
+    else ss.insert(index);
+}
+
+void Query(string &s, int q)
+{
+    int n = s.length();
+    unordered_set<int> ss;
+
+    for(int i = 0; i < n/2; i++)
+    {
+        if(s[i] != s[n-1-i]) ss.insert(i);
+    }
+
+    for(int i = 0; i < q; i++)
+    {
+        int i1, i2;
+        char ch;
+
+        in3(i1, i2, ch);
+
+        s[i1] = s[i2] = ch;
+        if(i1 > n/2) i1 = n-1-i1;
+        if(i2 > n/2) i2 = n-1-i2;
+
+        addremoveUnequal(s, i1, n, ss);
+        addremoveUnequal(s, i2, n, ss);
+
+        ss.empty() ? cout << "YES\n" : cout << "NO\n";
+    }
 }
 
 int main()
 {
     fast
-
-    int arr[] = {1, 2, 3, 4, 5, 3, 2};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    cout << "Longest length subsequence = "<< longLenSub(arr, n);
+    string str = "geeks";
+    int Q = 2;
+    Query(str, Q);
     return 0;
 }
